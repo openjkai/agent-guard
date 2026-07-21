@@ -6,14 +6,14 @@ Run 500 agent scenarios before deployment. Replay failures. Compare prompt and m
 
 ## Status
 
-Early development. Phase 1 (engine + SDK + CLI) is in progress.
+**Phase 1 complete** — engine, SDK, and CLI are working.
 
 | Package | Path | Status |
 |---------|------|--------|
-| SDK + CLI | `packages/agentguard` | Scaffolded |
+| SDK + CLI | `packages/agentguard` | Phase 1 complete |
 | API server | `packages/server` | Scaffolded (Phase 3) |
 | Dashboard | `packages/web` | Scaffolded (Phase 4) |
-| Refund demo | `examples/refund-agent` | Placeholder (Phase 2) |
+| Refund demo | `examples/refund-agent` | Minimal demo agent + 4 scenarios |
 
 ## Quick start
 
@@ -34,6 +34,15 @@ make install
 
 # Verify CLI
 uv run agentguard version
+
+# Run the refund demo suite (offline, no API keys)
+uv run agentguard run \
+  --config examples/refund-agent/agentguard.yaml \
+  --suite examples/refund-agent/scenarios \
+  --agent examples/refund-agent/agent/simple_agent.py
+
+# Gate the release (exit code 30 = BLOCK)
+uv run agentguard gate <suite-id> --config examples/refund-agent/agentguard.yaml
 
 # Run tests
 make test

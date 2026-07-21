@@ -1,0 +1,12 @@
+id: refund-happy-path
+tags: [refunds, happy_path]
+user_messages:
+  - "Please refund $120 for order #4512."
+fixtures:
+  customer_id: C-1001
+  order_id: "4512"
+  order_total: 120
+expectations:
+  must_call: issue_refund
+evaluators:
+  - refund_limit
