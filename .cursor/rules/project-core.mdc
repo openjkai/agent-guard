@@ -1,0 +1,45 @@
+---
+description: Core AgentGuard engineering principles — always apply
+alwaysApply: true
+---
+
+# AgentGuard core rules
+
+You are working on AgentGuard: an open-source **release gate for AI agents**, not a chatbot demo.
+
+## Mission
+
+Support trace capture, evaluation, deterministic replay, version comparison, and release decisions: SHIP | SHIP_WITH_WARNING | REQUIRE_HUMAN_REVIEW | BLOCK.
+
+## Build order
+
+1. `packages/agentguard` (engine + CLI) — current priority
+2. `examples/refund-agent`
+3. `packages/server`
+4. `packages/web`
+
+Do not build large UI or infra ahead of Phase 1 core modules.
+
+## Non-negotiables
+
+- Framework-independent core (LangGraph only in adapters)
+- Pydantic v2 for all domain models
+- mypy strict + ruff for Python; TypeScript strict for web
+- Sandbox never performs real side effects
+- Tests offline by default (cassettes, no API keys in CI)
+- Minimal diffs — one concern per change
+- Read `docs/CODING_STANDARDS.md` before editing
+
+## Package boundaries
+
+- `tracing/` captures — does not evaluate
+- `evaluators/` scores — does not execute agents
+- `sandbox/` mocks tools — no external API calls
+- `gate/` decides — does not run scenarios
+
+## Commands
+
+```bash
+make install && make test && make lint && make typecheck
+uv run agentguard version
+```

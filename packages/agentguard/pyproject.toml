@@ -1,0 +1,66 @@
+[project]
+name = "agentguard"
+version = "0.1.0"
+description = "Open-source preflight and release gate for AI agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "AgentGuard Contributors" }]
+keywords = ["ai", "agents", "evaluation", "testing", "reliability", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "typer>=0.15.0",
+    "rich>=13.9.0",
+    "pyyaml>=6.0.2",
+    "httpx>=0.28.0",
+    "jsonschema>=4.23.0",
+    "opentelemetry-api>=1.29.0",
+    "opentelemetry-sdk>=1.29.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
+    "mypy>=1.14.0",
+    "ruff>=0.9.0",
+    "types-PyYAML>=6.0.12",
+]
+langgraph = ["langgraph>=0.2.0", "langchain-core>=0.3.0"]
+openai = ["openai>=1.60.0"]
+anthropic = ["anthropic>=0.43.0"]
+
+[project.scripts]
+agentguard = "agentguard.cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/agent-guard/agent-guard"
+Documentation = "https://github.com/agent-guard/agent-guard/tree/main/docs"
+Repository = "https://github.com/agent-guard/agent-guard"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentguard"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+src = ["src"]
+
+[tool.mypy]
+packages = ["agentguard"]

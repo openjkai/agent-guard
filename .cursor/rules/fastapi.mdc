@@ -1,0 +1,28 @@
+---
+description: FastAPI server conventions
+globs: "packages/server/**/*.py"
+alwaysApply: false
+---
+
+# FastAPI server rules
+
+## Structure
+
+- `app/main.py` — app factory only
+- `app/api/` — thin route handlers
+- `app/models/` — SQLAlchemy + Pydantic schemas
+- `app/workers/` — Celery tasks
+- `app/services/` — business logic (when added)
+
+## Rules
+
+- Async routes and async SQLAlchemy (`asyncpg`)
+- Settings via `pydantic-settings` from env — never hardcode secrets
+- Alembic for all schema migrations
+- API key auth on non-health endpoints
+- Delegate to services — no business logic in route handlers
+
+## Testing
+
+- `httpx.AsyncClient` or `TestClient` for route tests
+- Mock Celery tasks in unit tests; integration tests marked explicitly

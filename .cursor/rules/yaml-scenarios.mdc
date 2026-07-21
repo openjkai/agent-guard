@@ -1,0 +1,24 @@
+---
+description: YAML scenario and config conventions
+globs: "**/*.{yaml,yml}"
+alwaysApply: false
+---
+
+# YAML rules (scenarios and config)
+
+## Scenarios
+
+- `id`: kebab-case, globally unique within a suite
+- Always include `tags` for filtering
+- Prefer explicit `evaluators` and `expectations` over implicit behavior
+- Document non-obvious fixtures with `#` comments
+
+## Release policy (`agentguard.yaml`)
+
+- `block_if`, `require_review_if`, `warn_if` — ordered severity
+- Use measurable thresholds: `pass_rate < 0.95`, not vague rules
+
+## Validation
+
+- Scenarios must validate against Pydantic schema on load
+- Fail fast with file path and field name in error messages

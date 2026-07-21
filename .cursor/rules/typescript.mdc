@@ -1,0 +1,38 @@
+---
+description: TypeScript and Next.js standards for AgentGuard dashboard
+globs: "packages/web/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript / Next.js rules
+
+## Stack
+
+- Next.js 15 App Router, React 19, TypeScript strict
+- Tailwind + shadcn/ui (when UI phase starts)
+- ESLint + Prettier
+
+## Patterns
+
+```typescript
+import type { RunSummary } from "@/lib/types";
+
+interface Props {
+  runs: RunSummary[];
+}
+```
+
+## Rules
+
+- No `any` — use `unknown` + narrowing
+- `"use client"` only when hooks or browser APIs required
+- One component per file; PascalCase component filenames
+- Type-only imports for types: `import type { ... }`
+- No `console.log` in committed code (warn/error only)
+
+## Structure
+
+- `src/app/` — routes and layouts
+- `src/components/` — UI components
+- `src/lib/` — API client, types, utils
+- `src/hooks/` — client hooks

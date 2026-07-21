@@ -1,0 +1,58 @@
+[project]
+name = "agent-guard-monorepo"
+version = "0.0.0"
+description = "AgentGuard monorepo — open-source release gate for AI agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+[tool.uv.workspace]
+members = ["packages/agentguard", "packages/server"]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.0",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["packages/agentguard/src", "packages/server/app", "packages/server/tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "B", "C4", "UP", "SIM", "TCH", "RUF",
+    "S",   # flake8-bandit (security)
+    "T20", # no print in library code (CLI exempt via per-file-ignores)
+]
+ignore = ["S101"]  # allow assert in tests
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101", "T20"]
+"**/cli/**" = ["T20"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+files = ["packages/agentguard/src", "packages/server/app"]
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["packages/agentguard/tests", "packages/server/tests"]
+addopts = "-ra -q --strict-markers"
+markers = [
+    "integration: tests that require external services or API keys",
+    "slow: long-running tests",
+]

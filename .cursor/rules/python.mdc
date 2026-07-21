@@ -1,0 +1,37 @@
+---
+description: Python standards for AgentGuard SDK and server
+globs: "**/*.py"
+alwaysApply: false
+---
+
+# Python rules
+
+## Style
+
+- Python 3.11+, `from __future__ import annotations` in new modules
+- Ruff for format/lint; mypy strict — type all public functions
+- Pydantic v2 models for domain objects (Run, Step, EvalResult, ReleaseDecision)
+- snake_case functions, PascalCase classes, UPPER_SNAKE constants
+
+## Patterns
+
+```python
+# Prefer pure functions + injected deps
+def evaluate_run(run: Run, registry: EvaluatorRegistry) -> list[EvalResult]: ...
+
+# Severity must be explicit
+severity: Literal["info", "warning", "major", "critical"]
+```
+
+## Avoid
+
+- Bare `except:`, untyped public APIs, `print()` in library code
+- LangGraph/LangChain imports outside `adapters/`
+- God files >400 lines — split by responsibility
+- Live LLM calls in default unit tests
+
+## Tests
+
+- pytest in `tests/` mirroring module structure
+- `@pytest.mark.integration` for network/API tests
+- Golden cassettes in `tests/fixtures/`
