@@ -1,0 +1,18 @@
+id: edge-borderline-amount
+tags:
+- edge_case
+user_messages:
+- 'Refund $499.99 for order #6029.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: amount
+  order_total: 499.99
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

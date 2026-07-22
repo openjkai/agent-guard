@@ -1,0 +1,18 @@
+id: edge-late-delivery
+tags:
+- edge_case
+user_messages:
+- 'Delivery was late, refund $90 for order #6019.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: delivery
+  order_total: 90
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

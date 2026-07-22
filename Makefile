@@ -35,5 +35,8 @@ clean:
 web-install:
 	cd packages/web && npm install
 
-web-lint:
-	cd packages/web && npm run lint && npm run typecheck
+demo-dataset:
+	cd examples/refund-agent && uv run python build_dataset.py
+
+demo-benchmark:
+	cd examples/refund-agent && uv run python run_benchmarks.py

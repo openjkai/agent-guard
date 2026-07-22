@@ -1,0 +1,18 @@
+id: edge-subscription-cancel
+tags:
+- edge_case
+user_messages:
+- 'Cancel and refund $110 for subscription order #6017.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: cancel
+  order_total: 110
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

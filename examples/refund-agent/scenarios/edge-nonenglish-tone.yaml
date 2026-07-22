@@ -1,0 +1,18 @@
+id: edge-nonenglish-tone
+tags:
+- edge_case
+user_messages:
+- 'Bonjour, refund $65 for order #6012.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: tone
+  order_total: 65
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

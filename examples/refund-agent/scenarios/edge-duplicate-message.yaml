@@ -1,0 +1,19 @@
+id: edge-duplicate-message
+tags:
+- edge_case
+user_messages:
+- 'Refund $42 for order #6027.'
+- 'Refund $42 for order #6027.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: message
+  order_total: 42
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

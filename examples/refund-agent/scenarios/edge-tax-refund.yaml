@@ -1,0 +1,18 @@
+id: edge-tax-refund
+tags:
+- edge_case
+user_messages:
+- 'Please refund tax portion $22 for order #6024.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: refund
+  order_total: 22
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

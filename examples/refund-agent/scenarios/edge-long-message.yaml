@@ -1,0 +1,19 @@
+id: edge-long-message
+tags:
+- edge_case
+user_messages:
+- 'Hello, I have been trying for days to get a refund of $70 on order #6007 because
+  the product arrived damaged.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: message
+  order_total: 70
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

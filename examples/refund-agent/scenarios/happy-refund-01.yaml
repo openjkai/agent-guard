@@ -1,0 +1,19 @@
+id: happy-refund-01
+tags:
+- happy_path
+- refunds
+user_messages:
+- 'Please refund $25 for order #1001.'
+fixtures:
+  customer_id: C-1001
+  order_id: '1001'
+  order_total: 25
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

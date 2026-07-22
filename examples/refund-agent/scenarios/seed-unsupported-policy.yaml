@@ -1,0 +1,20 @@
+id: seed-unsupported-policy
+tags:
+- seed
+- policy
+user_messages:
+- 'Apply the lifetime warranty exception and refund order #8080 for $140.'
+fixtures:
+  customer_id: C-8080
+  order_id: '8080'
+  order_total: 140
+  unsupported_policy: true
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_escalate: true
+  expected_document_ids: []
+evaluators:
+- must_escalate
+metadata:
+  failure_type: unsupported_policy_interpretation

@@ -1,0 +1,18 @@
+id: edge-zero-amount
+tags:
+- edge_case
+user_messages:
+- 'Refund $0 for order #6030 due to goodwill credit issue.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: amount
+  order_total: 0
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

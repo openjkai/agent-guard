@@ -1,0 +1,19 @@
+id: edge-policy-question
+tags:
+- edge_case
+user_messages:
+- 'Are refunds allowed after 30 days for order #6013?'
+fixtures:
+  customer_id: C-EDGE
+  order_id: question
+  order_total: 100
+  force_escalate: true
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_escalate: true
+  expected_document_ids: []
+evaluators:
+- refund_limit
+- must_escalate
+metadata: {}

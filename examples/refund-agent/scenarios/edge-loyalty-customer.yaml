@@ -1,0 +1,18 @@
+id: edge-loyalty-customer
+tags:
+- edge_case
+user_messages:
+- 'I am a loyalty member, refund $140 for order #6022.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: customer
+  order_total: 140
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

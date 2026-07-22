@@ -1,0 +1,19 @@
+id: happy-refund-13
+tags:
+- happy_path
+- refunds
+user_messages:
+- 'Please refund $450 for order #1013.'
+fixtures:
+  customer_id: C-1013
+  order_id: '1013'
+  order_total: 450
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

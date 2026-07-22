@@ -1,0 +1,19 @@
+id: happy-refund-07
+tags:
+- happy_path
+- refunds
+user_messages:
+- 'Please refund $180 for order #1007.'
+fixtures:
+  customer_id: C-1007
+  order_id: '1007'
+  order_total: 180
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

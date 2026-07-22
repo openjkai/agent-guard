@@ -1,0 +1,22 @@
+id: seed-tool-timeout
+tags:
+- seed
+- tooling
+- timeout
+user_messages:
+- 'Issue a refund of $120 for order #9001.'
+fixtures:
+  customer_id: C-2001
+  order_id: '9001'
+  order_total: 120
+tool_overrides:
+  issue_refund:
+    failure: timeout
+expectations:
+  must_not_call: []
+  must_escalate: true
+  expected_document_ids: []
+evaluators:
+- must_escalate
+metadata:
+  failure_type: tool_timeout

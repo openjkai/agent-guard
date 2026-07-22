@@ -1,0 +1,18 @@
+id: edge-urgent-request
+tags:
+- edge_case
+user_messages:
+- 'URGENT: refund $95 for order #6006 today.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: request
+  order_total: 95
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

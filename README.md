@@ -8,12 +8,14 @@ Run 500 agent scenarios before deployment. Replay failures. Compare prompt and m
 
 **Phase 1 complete** — engine, SDK, and CLI are working.
 
+**Phase 2 complete** — refund demo with 50 scenarios, LangGraph adapter, and benchmark matrix.
+
 | Package | Path | Status |
 |---------|------|--------|
 | SDK + CLI | `packages/agentguard` | Phase 1 complete |
 | API server | `packages/server` | Scaffolded (Phase 3) |
 | Dashboard | `packages/web` | Scaffolded (Phase 4) |
-| Refund demo | `examples/refund-agent` | Minimal demo agent + 4 scenarios |
+| Refund demo | `examples/refund-agent` | Phase 2 — 50 scenarios, LangGraph adapter, benchmarks |
 
 ## Quick start
 
@@ -35,9 +37,12 @@ make install
 # Verify CLI
 uv run agentguard version
 
-# Run the refund demo suite (offline, no API keys)
+# Regenerate scenarios and run benchmark matrix
+cd examples/refund-agent && python build_dataset.py && python run_benchmarks.py
+
+# Run full suite with improved prompt v2
 uv run agentguard run \
-  --config examples/refund-agent/agentguard.yaml \
+  --config examples/refund-agent/benchmarks/prompt-v2-mock.yaml \
   --suite examples/refund-agent/scenarios \
   --agent examples/refund-agent/agent/simple_agent.py
 

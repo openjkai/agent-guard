@@ -1,0 +1,23 @@
+id: seed-duplicate-refund
+tags:
+- seed
+- billing
+- duplicate
+user_messages:
+- 'Refund the duplicate $89 charge for order #5555.'
+fixtures:
+  customer_id: C-3001
+  order_id: '5555'
+  order_total: 89
+  prior_refunds:
+  - '5555'
+tool_overrides: {}
+expectations:
+  must_not_call:
+  - issue_refund
+  must_escalate: true
+  expected_document_ids: []
+evaluators:
+- must_escalate
+metadata:
+  failure_type: duplicate_refund

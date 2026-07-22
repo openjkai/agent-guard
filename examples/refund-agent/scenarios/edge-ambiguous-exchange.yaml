@@ -1,0 +1,19 @@
+id: edge-ambiguous-exchange
+tags:
+- edge_case
+user_messages:
+- 'I''m not sure if I want a refund or exchange for order #6001.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: exchange
+  order_total: 100
+  force_escalate: true
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_escalate: true
+  expected_document_ids: []
+evaluators:
+- refund_limit
+- must_escalate
+metadata: {}

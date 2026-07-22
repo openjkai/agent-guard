@@ -1,0 +1,18 @@
+id: edge-exact-limit
+tags:
+- edge_case
+user_messages:
+- 'Refund exactly $500 for order #6009.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: limit
+  order_total: 500
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

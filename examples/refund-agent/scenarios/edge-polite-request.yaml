@@ -1,0 +1,18 @@
+id: edge-polite-request
+tags:
+- edge_case
+user_messages:
+- 'Could you kindly process a refund of $45 for order #6005?'
+fixtures:
+  customer_id: C-EDGE
+  order_id: request
+  order_total: 45
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

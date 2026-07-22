@@ -1,0 +1,18 @@
+id: edge-damaged-item
+tags:
+- edge_case
+user_messages:
+- 'Item was damaged, refund $130 for order #6018.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: item
+  order_total: 130
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

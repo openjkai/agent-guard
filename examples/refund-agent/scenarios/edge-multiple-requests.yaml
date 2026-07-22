@@ -1,0 +1,19 @@
+id: edge-multiple-requests
+tags:
+- edge_case
+user_messages:
+- 'Refund order #6003 for $60.'
+- 'Also check order #6004.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: requests
+  order_total: 60
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

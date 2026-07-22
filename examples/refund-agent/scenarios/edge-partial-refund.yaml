@@ -1,0 +1,18 @@
+id: edge-partial-refund
+tags:
+- edge_case
+user_messages:
+- 'Can I get a partial refund of $80 on order #6002?'
+fixtures:
+  customer_id: C-EDGE
+  order_id: refund
+  order_total: 80
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

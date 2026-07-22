@@ -1,0 +1,18 @@
+id: edge-wrong-item
+tags:
+- edge_case
+user_messages:
+- 'Wrong item shipped, refund $115 for order #6020.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: item
+  order_total: 115
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

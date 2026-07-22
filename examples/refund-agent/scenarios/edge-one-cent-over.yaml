@@ -1,0 +1,18 @@
+id: edge-one-cent-over
+tags:
+- edge_case
+user_messages:
+- 'Refund $500.01 for order #6010.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: over
+  order_total: 500.01
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_escalate: true
+  expected_document_ids: []
+evaluators:
+- refund_limit
+- must_escalate
+metadata: {}

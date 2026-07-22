@@ -1,0 +1,19 @@
+id: edge-account-verification
+tags:
+- edge_case
+user_messages:
+- 'Refund $85 for order #6015 after verifying account C-6015.'
+fixtures:
+  customer_id: C-6015
+  order_id: verification
+  order_total: 85
+  expected_customer_id: C-6015
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

@@ -1,0 +1,19 @@
+agent:
+  provider: mock
+  model: mock-model-claude-haiku
+  config:
+    prompt_version: v2
+
+gate:
+  block_if:
+    - any_critical_failure
+    - pass_rate < 0.85
+  require_review_if:
+    - pass_rate < 0.95
+    - any_major_failure
+  warn_if:
+    - p95_latency_ms > 4000
+    - avg_cost_usd > 0.05
+
+concurrency: 4
+storage_dir: .agentguard/benchmarks/prompt-v2-claude-haiku

@@ -1,0 +1,19 @@
+id: edge-billing-dispute
+tags:
+- edge_case
+user_messages:
+- 'My card was charged twice for order #6014, refund $75.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: dispute
+  order_total: 75
+  prior_refunds: []
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

@@ -1,0 +1,18 @@
+id: edge-shipping-refund
+tags:
+- edge_case
+user_messages:
+- 'Refund shipping $18 for order #6025.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: refund
+  order_total: 18
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

@@ -11,6 +11,7 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 
 from agentguard.adapters.callable import AgentFn, CallableAgent, config_hash
+from agentguard.adapters.langgraph import LangGraphAdapter
 from agentguard.adapters.llm import LLMClient
 from agentguard.evaluators.builtin import apply_expectations
 from agentguard.evaluators.registry import GLOBAL_REGISTRY
@@ -118,35 +119,55 @@ def _metadata_from_scenario(scenario: Scenario) -> dict[str, Any]:
 class ScenarioRunner:
     def __init__(
         self,
-        agent_fn: AgentFn,
-        project: ProjectConfig,
+        agent_fn: AgentFn | None = None,
+        project: ProjectConfig | None = None,
         store: FileStore | None = None,
+        *,
+        langgraph_runner: Any | None = None,
     ) -> None:
+        if project is None:
+            raise ValueError("project config is required")
         self.agent_fn = agent_fn
         self.project = project
         self.store = store or FileStore(project.storage_dir)
-        self.agent = CallableAgent(
-            agent_fn,
-            config={
-                "provider": project.agent.provider,
-                "model": project.agent.model,
-                **project.agent.config,
-            },
-            llm_client=_build_llm_client(project.agent),
-        )
+        agent_config = {
+            "provider": project.agent.provider,
+            "model": project.agent.model,
+            **project.agent.config,
+        }
+        llm_client = _build_llm_client(project.agent)
+        if langgraph_runner is not None:
+            self._adapter: CallableAgent | LangGraphAdapter = LangGraphAdapter(
+                langgraph_runner,
+                config=agent_config,
+                llm_client=llm_client,
+            )
+        elif agent_fn is not None:
+            self._adapter = CallableAgent(
+                agent_fn,
+                config=agent_config,
+                llm_client=llm_client,
+            )
+        else:
+            raise ValueError("Either agent_fn or langgraph_runner is required")
 
     def run_scenario(
         self, scenario: Scenario, *, suite_id: str | None = None
     ) -> EvaluatedRun:
-        toolbox = build_default_toolbox(scenario.fixtures)
+        merged_fixtures = {
+            **self.project.agent.config,
+            **scenario.fixtures,
+            "model": self.project.agent.model,
+        }
+        toolbox = build_default_toolbox(merged_fixtures)
         _apply_tool_overrides(toolbox, scenario)
         run_id = str(uuid4())
         recorder = InteractionRecorder(run_id=run_id)
-        run = self.agent.run(
+        run = self._adapter.run(
             scenario_id=scenario.id,
             user_messages=scenario.user_messages,
             toolbox=toolbox,
-            fixtures=scenario.fixtures,
+            fixtures=merged_fixtures,
             recorder=recorder,
             suite_id=suite_id,
             run_id=run_id,

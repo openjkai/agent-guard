@@ -43,6 +43,11 @@ console = Console()
 
 def _load_agent_module(path: Path) -> AgentFn:
     import importlib.util
+    import sys
+
+    agent_dir = str(path.resolve().parent)
+    if agent_dir not in sys.path:
+        sys.path.insert(0, agent_dir)
 
     spec = importlib.util.spec_from_file_location("agentguard_user_agent", path)
     if spec is None or spec.loader is None:

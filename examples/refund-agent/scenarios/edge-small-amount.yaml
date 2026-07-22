@@ -1,0 +1,18 @@
+id: edge-small-amount
+tags:
+- edge_case
+user_messages:
+- 'Refund $5 for order #6008.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: amount
+  order_total: 5
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

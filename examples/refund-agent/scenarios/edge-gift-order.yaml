@@ -1,0 +1,18 @@
+id: edge-gift-order
+tags:
+- edge_case
+user_messages:
+- 'Refund $40 for gift order #6016 purchased by a friend.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: order
+  order_total: 40
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}

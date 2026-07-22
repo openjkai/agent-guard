@@ -1,0 +1,18 @@
+id: edge-fraud-check
+tags:
+- edge_case
+user_messages:
+- 'Refund $160 for order #6026 after fraud review.'
+fixtures:
+  customer_id: C-EDGE
+  order_id: check
+  order_total: 160
+tool_overrides: {}
+expectations:
+  must_not_call: []
+  must_call: issue_refund
+  must_escalate: false
+  expected_document_ids: []
+evaluators:
+- refund_limit
+metadata: {}
