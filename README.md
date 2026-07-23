@@ -10,10 +10,12 @@ Run 500 agent scenarios before deployment. Replay failures. Compare prompt and m
 
 **Phase 2 complete** — refund demo with 50 scenarios, LangGraph adapter, and benchmark matrix.
 
+**Phase 3 complete** — FastAPI server, Postgres persistence, Celery workers, SSE progress.
+
 | Package | Path | Status |
 |---------|------|--------|
 | SDK + CLI | `packages/agentguard` | Phase 1 complete |
-| API server | `packages/server` | Scaffolded (Phase 3) |
+| API server | `packages/server` | Phase 3 complete — FastAPI, Postgres, Celery, SSE |
 | Dashboard | `packages/web` | Scaffolded (Phase 4) |
 | Refund demo | `examples/refund-agent` | Phase 2 — 50 scenarios, LangGraph adapter, benchmarks |
 
@@ -57,10 +59,51 @@ make lint
 make typecheck
 ```
 
-### Docker (Phase 3+)
+### Docker (Phase 3)
 
 ```bash
-docker compose up
+# Start Postgres, Redis, API, and Celery worker
+make docker-up
+
+# API: http://localhost:8000/docs
+# Header: X-API-Key: dev-change-me
+```
+
+### API quick start (local)
+
+```bash
+# Terminal 1 — Postgres + Redis
+docker compose up postgres redis
+
+# Terminal 2 — API
+export DATABASE_URL=postgresql+asyncpg://agentguard:agentguard@localhost:5432/agentguard
+export REDIS_URL=redis://localhost:6379/0
+export AGENTGUARD_API_KEY=dev-change-me
+export REPO_ROOT=$PWD
+make server-api
+
+# Terminal 3 — Celery worker
+cd packages/server && uv run celery -A app.workers.celery_app:celery_app worker --loglevel=info
+```
+
+Create a project and run a suite:
+
+```bash
+CONFIG_JSON=$(python - <<'PY'
+import json, yaml, pathlib
+config = yaml.safe_load(pathlib.Path("examples/refund-agent/benchmarks/prompt-v2-mock.yaml").read_text())
+print(json.dumps({
+    "name": "refund-demo",
+    "agent_module_path": "examples/refund-agent/agent/simple_agent.py",
+    "scenarios_path": "examples/refund-agent/scenarios",
+    "config_json": config,
+}))
+PY
+)
+
+curl -X POST http://localhost:8000/api/v1/projects \
+  -H 'Content-Type: application/json' \
+  -d "$CONFIG_JSON"
 ```
 
 ## Repository layout

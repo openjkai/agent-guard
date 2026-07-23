@@ -1,4 +1,4 @@
-.PHONY: install sync test lint format typecheck check clean cli-version web-install web-lint
+.PHONY: install sync test lint format typecheck check clean cli-version web-install web-lint demo-dataset demo-benchmark server-api docker-up
 
 UV := uv
 export PATH := $(HOME)/.local/bin:$(PATH)
@@ -40,3 +40,9 @@ demo-dataset:
 
 demo-benchmark:
 	cd examples/refund-agent && uv run python run_benchmarks.py
+
+server-api:
+	cd packages/server && uv run uvicorn app.main:app --reload --port 8000
+
+docker-up:
+	docker compose up --build

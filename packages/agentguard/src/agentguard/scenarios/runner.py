@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from typing import Any
@@ -190,7 +191,11 @@ class ScenarioRunner:
         return EvaluatedRun(run=run, eval_results=eval_results)
 
     def run_suite(
-        self, scenarios: list[Scenario], *, suite_id: str | None = None
+        self,
+        scenarios: list[Scenario],
+        *,
+        suite_id: str | None = None,
+        progress_callback: Callable[[int, int, str], None] | None = None,
     ) -> SuiteResult:
         suite = SuiteResult(
             suite_id=suite_id or str(uuid4()),
@@ -200,6 +205,8 @@ class ScenarioRunner:
         if concurrency == 1 or len(scenarios) == 1:
             for scenario in scenarios:
                 suite.runs.append(self.run_scenario(scenario, suite_id=suite.suite_id))
+                if progress_callback:
+                    progress_callback(len(suite.runs), len(scenarios), scenario.id)
         else:
             with ThreadPoolExecutor(max_workers=concurrency) as executor:
                 futures = {
@@ -209,7 +216,12 @@ class ScenarioRunner:
                     for scenario in scenarios
                 }
                 for future in as_completed(futures):
-                    suite.runs.append(future.result())
+                    evaluated = future.result()
+                    suite.runs.append(evaluated)
+                    if progress_callback:
+                        progress_callback(
+                            len(suite.runs), len(scenarios), evaluated.run.scenario_id
+                        )
             suite.runs.sort(key=lambda item: item.run.scenario_id)
         suite.finished_at = datetime.now(timezone.utc)
         self.store.save_model(suite.suite_id, "suite.json", suite)

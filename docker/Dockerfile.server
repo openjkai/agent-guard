@@ -1,3 +1,20 @@
-# Placeholder for Phase 3 server image
-# FROM python:3.11-slim
-# ...
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl build-essential libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+COPY . .
+
+RUN uv sync --all-packages --all-extras
+
+ENV PYTHONPATH=/app/packages/server
+ENV REPO_ROOT=/app
+
+EXPOSE 8000
+
+ENTRYPOINT ["/app/docker/entrypoint.sh"]
