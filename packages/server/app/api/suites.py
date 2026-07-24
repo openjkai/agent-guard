@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Annotated, Any
+from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from sse_starlette.sse import EventSourceResponse
 
-from app.deps import SessionDep, SettingsDep, verify_api_key
+from app.deps import SessionDep, SettingsDep
 from app.schemas.api import GateReportRead, RunDetail, RunRead, SuiteRead
 from app.services.progress import ProgressPublisher
 from app.services.suite_service import SuiteService
@@ -66,7 +66,6 @@ async def suite_events(
     suite_id: str,
     session: SessionDep,
     settings: SettingsDep,
-    _: Annotated[None, Depends(verify_api_key)],
 ) -> EventSourceResponse:
     service = SuiteService(session, settings)
     suite = await service.get_suite(suite_id)

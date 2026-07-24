@@ -1,4 +1,4 @@
-.PHONY: install sync test lint format typecheck check clean cli-version web-install web-lint demo-dataset demo-benchmark server-api docker-up
+.PHONY: install sync test lint format typecheck check clean cli-version web-install web-lint web-typecheck web-check web-dev demo-dataset demo-benchmark server-api docker-up
 
 UV := uv
 export PATH := $(HOME)/.local/bin:$(PATH)
@@ -34,6 +34,17 @@ clean:
 
 web-install:
 	cd packages/web && npm install
+
+web-lint:
+	cd packages/web && npm run lint
+
+web-typecheck:
+	cd packages/web && npm run typecheck
+
+web-check: web-lint web-typecheck
+
+web-dev:
+	cd packages/web && npm run dev
 
 demo-dataset:
 	cd examples/refund-agent && uv run python build_dataset.py

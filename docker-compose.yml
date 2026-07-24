@@ -40,6 +40,7 @@ services:
       AGENTGUARD_API_KEY: dev-change-me
       REPO_ROOT: /app
       ARTIFACTS_DIR: /app/.agentguard/server-artifacts
+      CORS_ORIGINS: http://localhost:3000
     depends_on:
       postgres:
         condition: service_healthy
@@ -62,11 +63,26 @@ services:
       AGENTGUARD_API_KEY: dev-change-me
       REPO_ROOT: /app
       ARTIFACTS_DIR: /app/.agentguard/server-artifacts
+      CORS_ORIGINS: http://localhost:3000
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+      api:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      AGENTGUARD_API_URL: http://api:8000
+      AGENTGUARD_API_KEY: dev-change-me
+      NEXT_PUBLIC_AGENTGUARD_API_URL: http://localhost:8000
+    depends_on:
       api:
         condition: service_healthy
 

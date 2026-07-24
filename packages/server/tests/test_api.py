@@ -50,6 +50,10 @@ def test_project_and_suite_flow(client: TestClient, auth_headers: dict[str, str]
     assert runs.status_code == 200
     assert len(runs.json()) == 50
 
+    suites = client.get(f"/api/v1/projects/{project_id}/suites")
+    assert suites.status_code == 200
+    assert len(suites.json()) == 1
+
     report = client.get(f"/api/v1/suites/{suite_id}/report")
     assert report.status_code == 200
     assert report.json()["decision"] in {

@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     artifacts_dir: str = ".agentguard/server-artifacts"
     celery_task_always_eager: bool = False
     repo_root: str = "."
+    cors_origins: str = "http://localhost:3000"
+
+    def cors_origin_list(self) -> list[str]:
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
 @lru_cache

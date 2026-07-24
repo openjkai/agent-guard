@@ -45,6 +45,17 @@ async def get_project(project_id: str, session: SessionDep) -> Project:
     return project
 
 
+@router.get("/{project_id}/suites", response_model=list[SuiteRead])
+async def list_project_suites(
+    project_id: str, session: SessionDep, settings: SettingsDep
+) -> list[SuiteRun]:
+    service = SuiteService(session, settings)
+    project = await service.get_project(project_id)
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    return await service.list_suites(project_id)
+
+
 @router.post(
     "/{project_id}/suites",
     response_model=SuiteRead,

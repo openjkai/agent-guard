@@ -12,11 +12,13 @@ Run 500 agent scenarios before deployment. Replay failures. Compare prompt and m
 
 **Phase 3 complete** — FastAPI server, Postgres persistence, Celery workers, SSE progress.
 
+**Phase 4 complete** — Next.js dashboard with suite runs, trace viewer, release report, and compare view.
+
 | Package | Path | Status |
 |---------|------|--------|
 | SDK + CLI | `packages/agentguard` | Phase 1 complete |
 | API server | `packages/server` | Phase 3 complete — FastAPI, Postgres, Celery, SSE |
-| Dashboard | `packages/web` | Scaffolded (Phase 4) |
+| Dashboard | `packages/web` | Phase 4 complete — Next.js dashboard |
 | Refund demo | `examples/refund-agent` | Phase 2 — 50 scenarios, LangGraph adapter, benchmarks |
 
 ## Quick start
@@ -59,14 +61,28 @@ make lint
 make typecheck
 ```
 
-### Docker (Phase 3)
+### Docker (Phase 3+)
 
 ```bash
-# Start Postgres, Redis, API, and Celery worker
+# Start Postgres, Redis, API, worker, and dashboard
 make docker-up
 
-# API: http://localhost:8000/docs
+# API docs: http://localhost:8000/docs
+# Dashboard: http://localhost:3000
 # Header: X-API-Key: dev-change-me
+```
+
+### Dashboard (Phase 4)
+
+```bash
+# Terminal 1 — API + dependencies
+docker compose up postgres redis api worker
+
+# Terminal 2 — dashboard
+cp packages/web/.env.example packages/web/.env.local
+make web-dev
+
+# Open http://localhost:3000
 ```
 
 ### API quick start (local)
