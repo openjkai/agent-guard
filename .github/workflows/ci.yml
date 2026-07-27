@@ -40,6 +40,12 @@ jobs:
       - name: Test
         run: uv run pytest
 
+      - name: Validate Docker Compose
+        run: docker compose config
+
+      - name: Release gate smoke
+        run: make demo-gate
+
   web:
     runs-on: ubuntu-latest
     defaults:

@@ -10,6 +10,7 @@ agent/
   simple_agent.py     # plain-Python adapter target
   langgraph_agent.py  # LangGraph adapter target
 scenarios/            # 50 YAML scenarios (generated)
+dataset-manifest.json # scenario index (generated with build_dataset.py)
 benchmarks/           # prompt/model config matrix
 policies/             # refund policy docs
 build_dataset.py      # regenerate scenarios/
@@ -67,3 +68,7 @@ python run_benchmarks.py
 | prompt-v2-claude-haiku | 100% | SHIP |
 
 Prompt v2 fixes wrong-account, duplicate-refund, and retrieval-injection checks that v1 misses.
+
+## Dataset manifest
+
+`dataset-manifest.json` lists all 50 scenarios with tags and seeded-failure metadata. Regenerate with `python build_dataset.py`. Documented in [docs/datasets/refund-evaluation-dataset.md](../../docs/datasets/refund-evaluation-dataset.md).

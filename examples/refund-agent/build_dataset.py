@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from agentguard.scenarios.generator import write_scenarios
@@ -190,7 +191,26 @@ def main() -> None:
         path.unlink()
     scenarios = build_dataset()
     paths = write_scenarios(scenarios, OUTPUT)
+    manifest = {
+        "name": "refund-agent-evaluation",
+        "version": "1.0.0",
+        "description": "50 offline scenarios for refund-agent release gating demos",
+        "scenario_count": len(scenarios),
+        "seeded_failure_count": sum(1 for item in scenarios if item.id.startswith("seed-")),
+        "scenarios": [
+            {
+                "id": scenario.id,
+                "tags": scenario.tags,
+                "seeded_failure": scenario.id.startswith("seed-"),
+                "failure_type": scenario.metadata.get("failure_type"),
+            }
+            for scenario in scenarios
+        ],
+    }
+    manifest_path = ROOT / "dataset-manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(f"Wrote {len(paths)} scenarios to {OUTPUT}")
+    print(f"Wrote manifest to {manifest_path}")
 
 
 if __name__ == "__main__":

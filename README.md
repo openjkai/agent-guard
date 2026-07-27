@@ -1,155 +1,139 @@
 # AgentGuard
 
-**An open-source preflight and reliability platform for AI agents that take real-world actions.**
+**Run 500 agent scenarios before deployment. Replay failures. Compare versions. Block unsafe releases.**
 
-Run 500 agent scenarios before deployment. Replay failures. Compare prompt and model versions. Block unsafe releases.
+An open-source preflight and reliability platform for AI agents that take real-world actions — not a chatbot demo.
+
+[![CI](https://github.com/openjkai/agent-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/openjkai/agent-guard/actions/workflows/ci.yml)
+[![Release gate](https://github.com/openjkai/agent-guard/actions/workflows/release-gate.yml/badge.svg)](https://github.com/openjkai/agent-guard/actions/workflows/release-gate.yml)
+
+> **Hosted demo (coming soon):** [demo.agentguard.dev](https://demo.agentguard.dev) — placeholder for a public read-only dashboard.
+
+## Why AgentGuard?
+
+An agent that works in a demo is not necessarily safe to ship. AgentGuard gives you evidence-backed release decisions before production:
+
+1. **Run scenarios** — YAML-defined tests with fixtures, tool mocks, and evaluators
+2. **Capture traces** — LLM, tool, and retrieval steps with token cost and latency
+3. **Replay failures** — deterministic cassettes reproduce bugs offline
+4. **Compare versions** — prompt and model A/B with pass-rate and cost deltas
+5. **Gate releases** — `SHIP` · `SHIP_WITH_WARNING` · `REQUIRE_HUMAN_REVIEW` · `BLOCK`
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph client [Your agent]
+        Agent[Agent code]
+    end
+
+    subgraph agentguard [AgentGuard]
+        Adapter[Adapter]
+        Sandbox[Sandbox mocks]
+        Tracer[Trace capture]
+        Eval[Evaluators]
+        Gate[Release gate]
+    end
+
+    subgraph surfaces [Surfaces]
+        CLI[CLI]
+        API[FastAPI + Celery]
+        UI[Next.js dashboard]
+    end
+
+    Agent --> Adapter
+    CLI --> Adapter
+    API --> Adapter
+    Adapter --> Sandbox
+    Adapter --> Tracer
+    Tracer --> Eval
+    Eval --> Gate
+    UI --> API
+```
+
+See [docs/architecture.md](docs/architecture.md) for the full system design.
 
 ## Status
 
-**Phase 1 complete** — engine, SDK, and CLI are working.
+All five build phases are complete for v0.1.
 
-**Phase 2 complete** — refund demo with 50 scenarios, LangGraph adapter, and benchmark matrix.
+| Phase | Deliverable |
+|-------|-------------|
+| 1 | Engine, SDK, CLI |
+| 2 | Refund demo — 50 scenarios, LangGraph adapter, benchmarks |
+| 3 | FastAPI server, Postgres, Celery, SSE |
+| 4 | Next.js dashboard — traces, reports, compare |
+| 5 | Docs, CI gating, evaluation dataset, launch polish |
 
-**Phase 3 complete** — FastAPI server, Postgres persistence, Celery workers, SSE progress.
-
-**Phase 4 complete** — Next.js dashboard with suite runs, trace viewer, release report, and compare view.
-
-| Package | Path | Status |
-|---------|------|--------|
-| SDK + CLI | `packages/agentguard` | Phase 1 complete |
-| API server | `packages/server` | Phase 3 complete — FastAPI, Postgres, Celery, SSE |
-| Dashboard | `packages/web` | Phase 4 complete — Next.js dashboard |
-| Refund demo | `examples/refund-agent` | Phase 2 — 50 scenarios, LangGraph adapter, benchmarks |
+| Package | Path |
+|---------|------|
+| SDK + CLI | `packages/agentguard` |
+| API server | `packages/server` |
+| Dashboard | `packages/web` |
+| Refund demo | `examples/refund-agent` |
 
 ## Quick start
 
-### Prerequisites
-
-- Python 3.11+
-- [uv](https://docs.astral.sh/uv/) (recommended)
-- Node.js 20+ (for web dashboard, Phase 4)
-
-### Setup
-
 ```bash
-# Clone and enter the repo
+git clone https://github.com/openjkai/agent-guard.git
 cd agent-guard
-
-# Install Python workspace (SDK + server)
 make install
 
-# Verify CLI
-uv run agentguard version
+# Offline benchmark (no API keys)
+make demo-dataset
+make demo-benchmark
 
-# Regenerate scenarios and run benchmark matrix
-cd examples/refund-agent && python build_dataset.py && python run_benchmarks.py
-
-# Run full suite with improved prompt v2
+# Run one suite and gate it
 uv run agentguard run \
   --config examples/refund-agent/benchmarks/prompt-v2-mock.yaml \
   --suite examples/refund-agent/scenarios \
   --agent examples/refund-agent/agent/simple_agent.py
 
-# Gate the release (exit code 30 = BLOCK)
-uv run agentguard gate <suite-id> --config examples/refund-agent/agentguard.yaml
-
-# Run tests
-make test
-
-# Lint and typecheck
-make lint
-make typecheck
+uv run agentguard gate <suite-id> \
+  --config examples/refund-agent/benchmarks/prompt-v2-mock.yaml
 ```
 
-### Docker (Phase 3+)
+Full guide: **[docs/QUICKSTART.md](docs/QUICKSTART.md)**
+
+### CI release gate
+
+```yaml
+# .github/workflows/release-gate.yml (included in repo)
+- run: uv run python scripts/release_gate_check.py \
+    --config examples/refund-agent/benchmarks/prompt-v2-mock.yaml \
+    --suite examples/refund-agent/scenarios \
+    --agent examples/refund-agent/agent/simple_agent.py \
+    --expect SHIP
+```
+
+Exit code `30` = `BLOCK`. See [docs/datasets/refund-evaluation-dataset.md](docs/datasets/refund-evaluation-dataset.md).
+
+### Docker (full stack)
 
 ```bash
-# Start Postgres, Redis, API, worker, and dashboard
 make docker-up
-
-# API docs: http://localhost:8000/docs
-# Dashboard: http://localhost:3000
-# Header: X-API-Key: dev-change-me
+# API → http://localhost:8000/docs
+# Dashboard → http://localhost:3000
 ```
 
-### Dashboard (Phase 4)
+## Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| [docs/QUICKSTART.md](docs/QUICKSTART.md) | Install and first gated run |
+| [docs/architecture.md](docs/architecture.md) | System design |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | What's next |
+| [docs/demo-video-script.md](docs/demo-video-script.md) | 60–90s launch demo storyboard |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contributor workflow |
+| [AGENTS.md](AGENTS.md) | Guidance for AI coding assistants |
+
+## Development
 
 ```bash
-# Terminal 1 — API + dependencies
-docker compose up postgres redis api worker
-
-# Terminal 2 — dashboard
-cp packages/web/.env.example packages/web/.env.local
-make web-dev
-
-# Open http://localhost:3000
+make check          # lint + typecheck + test (Python)
+make web-check      # lint + typecheck (dashboard)
+make demo-gate      # offline release-gate smoke test
 ```
-
-### API quick start (local)
-
-```bash
-# Terminal 1 — Postgres + Redis
-docker compose up postgres redis
-
-# Terminal 2 — API
-export DATABASE_URL=postgresql+asyncpg://agentguard:agentguard@localhost:5432/agentguard
-export REDIS_URL=redis://localhost:6379/0
-export AGENTGUARD_API_KEY=dev-change-me
-export REPO_ROOT=$PWD
-make server-api
-
-# Terminal 3 — Celery worker
-cd packages/server && uv run celery -A app.workers.celery_app:celery_app worker --loglevel=info
-```
-
-Create a project and run a suite:
-
-```bash
-CONFIG_JSON=$(python - <<'PY'
-import json, yaml, pathlib
-config = yaml.safe_load(pathlib.Path("examples/refund-agent/benchmarks/prompt-v2-mock.yaml").read_text())
-print(json.dumps({
-    "name": "refund-demo",
-    "agent_module_path": "examples/refund-agent/agent/simple_agent.py",
-    "scenarios_path": "examples/refund-agent/scenarios",
-    "config_json": config,
-}))
-PY
-)
-
-curl -X POST http://localhost:8000/api/v1/projects \
-  -H 'Content-Type: application/json' \
-  -d "$CONFIG_JSON"
-```
-
-## Repository layout
-
-```text
-agent-guard/
-  packages/
-    agentguard/     # Python SDK + CLI (core)
-    server/         # FastAPI + Celery workers
-    web/            # Next.js dashboard
-  examples/
-    refund-agent/   # Flagship demo agent
-  docs/             # Architecture, coding standards, guides
-  docker/           # Dockerfiles
-  .cursor/rules/    # AI assistant coding rules
-```
-
-See [docs/PLAN.md](docs/PLAN.md) for the full product plan and [docs/architecture.md](docs/architecture.md) for system design.
-
-## Coding standards
-
-All contributors must follow [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md). Key principles:
-
-- **Evidence over vibes** — every release decision is backed by traces and evaluators
-- **Determinism where it matters** — replay must reproduce failures reliably
-- **Framework independence** — core engine works without LangGraph
-- **Strict typing** — mypy strict (Python), TypeScript strict (web)
-- **Small, reviewable diffs** — one concern per PR
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for workflow and [AGENTS.md](AGENTS.md) for AI assistant guidance.
 
 ## License
 

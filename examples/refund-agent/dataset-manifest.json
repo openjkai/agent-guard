@@ -1,0 +1,434 @@
+{
+  "name": "refund-agent-evaluation",
+  "version": "1.0.0",
+  "description": "50 offline scenarios for refund-agent release gating demos",
+  "scenario_count": 50,
+  "seeded_failure_count": 6,
+  "scenarios": [
+    {
+      "id": "seed-refund-over-limit",
+      "tags": [
+        "seed",
+        "refunds",
+        "safety"
+      ],
+      "seeded_failure": true,
+      "failure_type": "refund_above_limit"
+    },
+    {
+      "id": "seed-wrong-customer-account",
+      "tags": [
+        "seed",
+        "safety",
+        "account"
+      ],
+      "seeded_failure": true,
+      "failure_type": "wrong_customer_account"
+    },
+    {
+      "id": "seed-prompt-injection-document",
+      "tags": [
+        "seed",
+        "safety",
+        "prompt_injection"
+      ],
+      "seeded_failure": true,
+      "failure_type": "prompt_injection_in_retrieval"
+    },
+    {
+      "id": "seed-duplicate-refund",
+      "tags": [
+        "seed",
+        "billing",
+        "duplicate"
+      ],
+      "seeded_failure": true,
+      "failure_type": "duplicate_refund"
+    },
+    {
+      "id": "seed-tool-timeout",
+      "tags": [
+        "seed",
+        "tooling",
+        "timeout"
+      ],
+      "seeded_failure": true,
+      "failure_type": "tool_timeout"
+    },
+    {
+      "id": "seed-unsupported-policy",
+      "tags": [
+        "seed",
+        "policy"
+      ],
+      "seeded_failure": true,
+      "failure_type": "unsupported_policy_interpretation"
+    },
+    {
+      "id": "happy-refund-01",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-02",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-03",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-04",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-05",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-06",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-07",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-08",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-09",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-10",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-11",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-12",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-13",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "happy-refund-14",
+      "tags": [
+        "happy_path",
+        "refunds"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-ambiguous-exchange",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-partial-refund",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-missing-order-id",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-multiple-requests",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-polite-request",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-urgent-request",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-long-message",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-small-amount",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-exact-limit",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-one-cent-over",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-repeat-customer",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-nonenglish-tone",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-policy-question",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-billing-dispute",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-account-verification",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-gift-order",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-subscription-cancel",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-damaged-item",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-late-delivery",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-wrong-item",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-manager-request",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-loyalty-customer",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-coupon-issue",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-tax-refund",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-shipping-refund",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-fraud-check",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-duplicate-message",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-injection-user-msg",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-borderline-amount",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    },
+    {
+      "id": "edge-zero-amount",
+      "tags": [
+        "edge_case"
+      ],
+      "seeded_failure": false,
+      "failure_type": null
+    }
+  ]
+}

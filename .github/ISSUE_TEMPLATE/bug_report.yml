@@ -1,0 +1,52 @@
+name: Bug report
+description: Report incorrect behavior in evaluators, replay, gate, or CLI
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Include steps to reproduce and expected vs actual behavior.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `uv run agentguard run ...`
+        2. Run `uv run agentguard gate ...`
+        3. See error
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: AgentGuard version
+      placeholder: "uv run agentguard version"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI
+        - Evaluators
+        - Replay / cassettes
+        - Release gate
+        - Server API
+        - Dashboard
+        - Refund demo
+        - Other
+    validations:
+      required: true

@@ -1,0 +1,39 @@
+name: Feature request
+description: Suggest a new evaluator, adapter, or platform capability
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem and the smallest change that would solve it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What reliability gap or workflow pain does this address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How should AgentGuard behave?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Likely phase
+      options:
+        - Core engine / SDK
+        - CLI
+        - Server / API
+        - Dashboard
+        - Docs / examples
+        - Not sure
+    validations:
+      required: false

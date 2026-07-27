@@ -1,0 +1,67 @@
+name: Release gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+env:
+  UV_SYSTEM_PYTHON: "1"
+
+jobs:
+  gate-v2-ship:
+    name: Prompt v2 must SHIP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync --all-packages --all-extras --group dev
+
+      - name: Build evaluation dataset
+        run: uv run python examples/refund-agent/build_dataset.py
+
+      - name: Run release gate
+        run: |
+          uv run python scripts/release_gate_check.py \
+            --config examples/refund-agent/benchmarks/prompt-v2-mock.yaml \
+            --suite examples/refund-agent/scenarios \
+            --agent examples/refund-agent/agent/simple_agent.py \
+            --expect SHIP
+
+  gate-v1-block:
+    name: Prompt v1 must BLOCK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync --all-packages --all-extras --group dev
+
+      - name: Build evaluation dataset
+        run: uv run python examples/refund-agent/build_dataset.py
+
+      - name: Run release gate
+        run: |
+          uv run python scripts/release_gate_check.py \
+            --config examples/refund-agent/benchmarks/prompt-v1-mock.yaml \
+            --suite examples/refund-agent/scenarios \
+            --agent examples/refund-agent/agent/simple_agent.py \
+            --expect BLOCK
